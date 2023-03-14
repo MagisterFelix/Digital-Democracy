@@ -27,12 +27,12 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, passport, email, password, **extra_fields):
+    def create_superuser(self, passport, email, password, address="", **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
-        return self.create_user(passport, email, password, **extra_fields)
+        return self.create_user(passport, email, password, address, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
