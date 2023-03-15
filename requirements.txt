@@ -1,4 +1,6 @@
 autopep8==2.0.2
+crispy-bootstrap5==0.7
 django==4.1.7
+djlint==1.19.16
 flake8==6.0.0
 python-decouple==3.8
