@@ -5,8 +5,14 @@ from .user import User
 
 class Log(models.Model):
 
+    class Action(models.IntegerChoices):
+        INTERACTION = 0, "Interaction"
+        LOGIN_ATTEMPT = 1, "Login attempt"
+        VOTING_ATTEMPT = 2, "Voting attempt"
+
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    action = models.IntegerField(choices=Action.choices, default=Action.INTERACTION)
     ip = models.CharField(max_length=128)
     location = models.CharField(max_length=128)
 

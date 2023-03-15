@@ -50,8 +50,8 @@ class VoteAdmin(ModelAdmin):
 @admin.register(Log)
 class LogAdmin(ModelAdmin):
 
-    list_display = ("created_at", "user", "ip", "location",)
-    readonly_fields = ("created_at", "user", "ip", "location",)
+    list_display = ("created_at", "user", "action", "ip", "location",)
+    readonly_fields = ("created_at", "user", "action", "ip", "location",)
 
 
 admin.site.unregister(Group)
