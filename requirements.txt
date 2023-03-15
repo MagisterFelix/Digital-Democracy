@@ -2,3 +2,4 @@ autopep8==2.0.2
 django==4.1.7
 flake8==6.0.0
 python-decouple==3.8
+web3==6.0.0
