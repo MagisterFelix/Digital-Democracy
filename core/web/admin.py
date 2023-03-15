@@ -3,9 +3,9 @@ from django.contrib.admin import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
+from core.web.models.ballot import Ballot
 from core.web.models.log import Log
 from core.web.models.user import User
-from core.web.models.vote import Vote
 
 
 @admin.register(User)
@@ -39,8 +39,8 @@ class UserAdmin(UserAdmin):
     ordering = ("passport",)
 
 
-@admin.register(Vote)
-class VoteAdmin(ModelAdmin):
+@admin.register(Ballot)
+class BallotAdmin(ModelAdmin):
 
     list_display = ("address",)
     readonly_fields = ("address",)
