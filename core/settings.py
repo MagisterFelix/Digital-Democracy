@@ -8,7 +8,7 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -22,10 +22,6 @@ INSTALLED_APPS = [
     "core.web",
 ]
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
-CRISPY_TEMPLATE_PACK = "bootstrap5"
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -34,6 +30,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "core.web.middleware.LogsMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -79,6 +76,12 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+CSRF_TRUSTED_ORIGINS = ["https://*.ngrok.io"]
 
 LANGUAGE_CODE = "en-us"
 
