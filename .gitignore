@@ -1,5 +1,6 @@
 # IDE
 .vscode/
+.idea
 
 # Environments
 .env
@@ -35,3 +36,13 @@ db*.json
 
 # Backup files
 *.bak
+
+# Smart contracts builds
+/blockchain/build/
+
+# Smart contracts migrations
+!**/migrations/1_initial_migration.js
+!**/migrations/2_deploy_contracts.js
+
+# App images
+/blockchain/*.AppImage
