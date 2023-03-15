@@ -50,7 +50,14 @@ class VoteAdmin(ModelAdmin):
 @admin.register(Log)
 class LogAdmin(ModelAdmin):
 
-    list_display = ("created_at", "user", "action", "ip", "location",)
+    list_display = ("created_at", "user", "action", "location",)
+    fieldsets = (
+        (None, {
+            "fields": (
+                "created_at", "user", "action", "location",
+            )
+        }),
+    )
     readonly_fields = ("created_at", "user", "action", "ip", "location",)
 
 
