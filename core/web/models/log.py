@@ -17,7 +17,7 @@ class Log(models.Model):
     location = models.CharField(max_length=128)
 
     def __str__(self):
-        return self.recorded_at.isoformat()
+        return self.created_at.isoformat()
 
     class Meta:
         db_table = "log"
