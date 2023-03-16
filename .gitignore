@@ -39,6 +39,7 @@ db*.json
 
 # Smart contracts builds
 /blockchain/build/
+/blockchain/voting/build/
 
 # Smart contracts migrations
 !**/migrations/1_initial_migration.js
@@ -46,3 +47,8 @@ db*.json
 
 # App images
 /blockchain/*.AppImage
+
+# Build Artifacts
+/blockchain/contracts/artifacts/
+/blockchain/voting/contracts/artifacts/
+
