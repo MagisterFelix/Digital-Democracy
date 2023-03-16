@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}
+  Ballot
+{% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <div class="card">
+          <div class="card-header">Title</div>
+          <div class="card-body">
+            <h5 class="card-title mb-4">Voting options:</h5>
+            <form method="post" action="{% url 'ballot' ballot.address %}">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-primary px-3">Vote</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

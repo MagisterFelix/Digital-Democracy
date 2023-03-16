@@ -69,6 +69,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    def activate(self):
+        self.is_active = True
+        self.save()
+
+    def deactivate(self):
+        self.is_active = False
+        self.save()
+
     def __str__(self):
         return str(self.passport)
 

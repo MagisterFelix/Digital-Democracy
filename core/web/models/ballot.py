@@ -1,32 +1,32 @@
 from django.db import models
 
 
-class VoteManager(models.Manager):
+class BallotManager(models.Manager):
 
     def create(self, address=None, **extra_fields):
-        vote = self.model(
+        ballot = self.model(
             address=address,
             **extra_fields
         )
-        vote.save()
+        ballot.save()
 
-        return vote
+        return ballot
 
 
-class Vote(models.Model):
+class Ballot(models.Model):
 
     address = models.CharField(
         max_length=128,
         primary_key=True,
         unique=True,
         error_messages={
-            "unique": "A vote with that address already exists.",
+            "unique": "A ballot with that address already exists.",
         })
 
-    objects = VoteManager()
+    objects = BallotManager()
 
     def __str__(self):
         return self.address
 
     class Meta:
-        db_table = "vote"
+        db_table = "ballot"
