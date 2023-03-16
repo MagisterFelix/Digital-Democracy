@@ -9,7 +9,7 @@
       <div class="col-8 text-end">
         <button type="button"
                 id="create"
-                class="btn btn-dark px-4"
+                class="btn btn-outline-dark px-4"
                 data-bs-toggle="modal"
                 data-bs-target="#ballotCreation">
           Create a ballot
@@ -50,7 +50,7 @@
                   <a class="nav-link" href="#">{{ ballot.address }}</a>
                 </li>
                 <li class="nav-item">
-                  <a class="btn btn-primary" href="#">Details</a>
+                  <a class="btn btn-primary" href="{% url 'ballot' ballot.address %}">Details</a>
                 </li>
               </ul>
             </div>

@@ -47,3 +47,17 @@ class BallotCreationForm(forms.Form):
             }
         )
     )
+
+
+class VoteForm(forms.Form):
+
+    option = forms.ChoiceField(
+        label="",
+        choices=(),
+        widget=forms.RadioSelect,
+    )
+
+    def __init__(self, *args, **kwargs):
+        options = kwargs.pop("options", ())
+        super(VoteForm, self).__init__(*args, **kwargs)
+        self.fields["option"].choices = options
