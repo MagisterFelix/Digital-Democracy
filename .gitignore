@@ -38,7 +38,7 @@ db*.json
 *.bak
 
 # Smart contracts builds
-/blockchain/build/
+/blockchain/users/build/
 /blockchain/voting/build/
 
 # Smart contracts migrations
@@ -49,6 +49,6 @@ db*.json
 /blockchain/*.AppImage
 
 # Build Artifacts
-/blockchain/contracts/artifacts/
+/blockchain/users/contracts/artifacts/
 /blockchain/voting/contracts/artifacts/
 
