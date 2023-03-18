@@ -8,7 +8,8 @@ class Log(models.Model):
     class Action(models.IntegerChoices):
         INTERACTION = 0, "Interaction"
         LOGIN_ATTEMPT = 1, "Login attempt"
-        VOTING_ATTEMPT = 2, "Voting attempt"
+        BALLOT_CREATION_ATTEMPT = 2, "Ballot creation attempt"
+        VOTING_ATTEMPT = 3, "Voting attempt"
 
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

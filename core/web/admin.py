@@ -13,14 +13,14 @@ class UserAdmin(UserAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None:
-            return ["passport", "email", "address",]
+            return ["passport", "email",]
         return []
 
-    list_display = ("passport", "email", "address", "is_active",)
+    list_display = ("passport", "email", "is_active",)
     fieldsets = (
         (None, {
             "fields": (
-                "passport", "password", "email", "address", "is_active",
+                "passport", "password", "email", "is_active",
             )
         }),
     )
@@ -35,7 +35,7 @@ class UserAdmin(UserAdmin):
     )
     filter_horizontal = ()
     list_filter = ()
-    readonly_fields = ("passport", "email", "address",)
+    readonly_fields = ("passport", "email",)
     ordering = ("passport",)
 
 

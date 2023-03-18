@@ -3,9 +3,10 @@ from django.db import models
 
 class BallotManager(models.Manager):
 
-    def create(self, address=None, **extra_fields):
+    def create(self, ballot_id, tx_hash, **extra_fields):
         ballot = self.model(
-            address=address,
+            id=ballot_id,
+            tx_hash=tx_hash,
             **extra_fields
         )
         ballot.save()
@@ -15,18 +16,19 @@ class BallotManager(models.Manager):
 
 class Ballot(models.Model):
 
-    address = models.CharField(
+    id = models.CharField(
         max_length=128,
         primary_key=True,
         unique=True,
         error_messages={
-            "unique": "A ballot with that address already exists.",
+            "unique": "A ballot with that id already exists.",
         })
+    tx_hash = models.CharField(max_length=128)
 
     objects = BallotManager()
 
     def __str__(self):
-        return self.address
+        return self.id
 
     class Meta:
         db_table = "ballot"
