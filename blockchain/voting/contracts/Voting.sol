@@ -21,12 +21,11 @@ contract Voting {
     event BallotCreated(bytes32 ballotAddress, string title, string[] options, uint256 endTime);
     event VoteCreated(bytes32 ballotAddress, string passport, uint8 option);
 
-    function createBallot(string memory _title, string[] memory _options, uint256 _duration) external returns (bytes32) {
+    function createBallot(string memory _title, string[] memory _options, uint256 _duration) external {
         bytes32 id = keccak256(abi.encodePacked(_title, block.timestamp));
         uint256 endTime = block.timestamp + _duration;
         ballots[id] = Ballot(_title, _options, endTime);
         emit BallotCreated(id, _title, _options, endTime);
-        return id;
     }
 
     function getBallot(bytes32 _ballotAddress) ballotExists(_ballotAddress) external view returns (Ballot memory) {
