@@ -46,6 +46,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.web.context_processors.auth_user",
             ],
         },
     },
@@ -85,7 +86,7 @@ CSRF_TRUSTED_ORIGINS = ["https://*.ngrok.io"]
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Kyiv"
 
 USE_I18N = False
 

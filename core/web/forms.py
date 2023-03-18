@@ -10,7 +10,7 @@ class LoginForm(forms.Form):
         label="Passport",
         required=True,
         min_value=0,
-        widget=forms.NumberInput(attrs={"autofocus": True})
+        widget=forms.NumberInput(attrs={"autofocus": True, "autocomplete": "off"})
     )
     password = forms.CharField(
         label="Password",
@@ -28,15 +28,16 @@ class BallotCreationForm(forms.Form):
 
     title = forms.CharField(
         label="Title",
-        required=True
+        required=True,
+        widget=forms.TextInput(attrs={"autocomplete": "off"})
     )
     options = forms.CharField(
         label="Options",
         required=True,
         help_text="Provide options separated by comma",
-        widget=forms.TextInput(attrs={"pattern": r"^(?!.*(?:^,|,$))(?=.*[,]).+$"})
+        widget=forms.TextInput(attrs={"pattern": r"^(?!.*(?:^,|,$))(?=.*[,]).+$", "autocomplete": "off"})
     )
-    expires_at = forms.DateField(
+    end_date = forms.DateField(
         label="End date",
         required=True,
         widget=forms.DateInput(
@@ -54,10 +55,16 @@ class VoteForm(forms.Form):
     option = forms.ChoiceField(
         label="",
         choices=(),
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect
     )
 
     def __init__(self, *args, **kwargs):
+        selected = kwargs.pop("selected", None)
         options = kwargs.pop("options", ())
+        disabled = kwargs.pop("disabled", False)
+
         super(VoteForm, self).__init__(*args, **kwargs)
+
         self.fields["option"].choices = options
+        self.fields["option"].initial = selected
+        self.fields["option"].disabled = bool(selected) or disabled

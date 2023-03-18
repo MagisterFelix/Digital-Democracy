@@ -41,8 +41,12 @@ class LogsMiddleware:
         if not request.user.is_authenticated:
             return self.get_response(request)
 
-        if request.path == "/ballot/" and request.method == "POST":
-            create_log(request.user, x_forwarded_for, Log.Action.VOTING_ATTEMPT)
+        if "/ballot/" in request.path and request.method == "POST":
+            if request.path == "/ballot/":
+                create_log(request.user, x_forwarded_for, Log.Action.BALLOT_CREATION_ATTEMPT)
+            else:
+                create_log(request.user, x_forwarded_for, Log.Action.VOTING_ATTEMPT)
+
             return self.get_response(request)
 
         create_log(request.user, x_forwarded_for, Log.Action.INTERACTION)

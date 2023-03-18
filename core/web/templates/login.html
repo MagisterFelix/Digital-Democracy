@@ -1,11 +1,13 @@
 {% extends "base.html" %}
-{% block style %}
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-  appearance: none;
-  margin: 0;
-  }
-{% endblock style %}
+{% block styles %}
+  <style>
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  </style>
+{% endblock styles %}
 {% load crispy_forms_tags %}
 {% block content %}
   <div class="container py-5">

@@ -42,9 +42,9 @@ class UserAdmin(UserAdmin):
 @admin.register(Ballot)
 class BallotAdmin(ModelAdmin):
 
-    list_display = ("address",)
-    readonly_fields = ("address",)
-    ordering = ("address",)
+    list_display = ("id", "tx_hash",)
+    readonly_fields = ("id", "tx_hash",)
+    ordering = ("id",)
 
 
 @admin.register(Log)
