@@ -6,17 +6,17 @@ from core.web.models.log import Log
 from core.web.models.user import User
 
 
-def create_log(user, x_forwarded_for, action):
-    ip = x_forwarded_for.split(",")[0]
-    response = requests.get(f"http://ip-api.com/json/{ip}?fields=country,city").json()
-    location = f"{response['country']}/{response['city']}"
-    Log.objects.create(user=user, action=action, ip=ip, location=location)
-
-
 class LogsMiddleware:
 
     def __init__(self, get_response):
         self.get_response = get_response
+
+    @staticmethod
+    def create_log(user, x_forwarded_for, action):
+        ip = x_forwarded_for.split(",")[0]
+        response = requests.get(f"http://ip-api.com/json/{ip}?fields=country,city").json()
+        location = f"{response['country']}/{response['city']}"
+        Log.objects.create(user=user, action=action, ip=ip, location=location)
 
     def __call__(self, request):
         x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
@@ -34,7 +34,7 @@ class LogsMiddleware:
 
             user = user.first()
 
-            create_log(user, x_forwarded_for, Log.Action.LOGIN_ATTEMPT)
+            self.create_log(user, x_forwarded_for, Log.Action.LOGIN_ATTEMPT)
 
             return self.get_response(request)
 
@@ -42,13 +42,13 @@ class LogsMiddleware:
             return self.get_response(request)
 
         if request.path == "/" and request.method == "POST":
-            create_log(request.user, x_forwarded_for, Log.Action.BALLOT_CREATION_ATTEMPT)
+            self.create_log(request.user, x_forwarded_for, Log.Action.BALLOT_CREATION_ATTEMPT)
             return self.get_response(request)
 
         if "/ballot/" in request.path and request.method == "POST":
-            create_log(request.user, x_forwarded_for, Log.Action.VOTING_ATTEMPT)
+            self.create_log(request.user, x_forwarded_for, Log.Action.VOTING_ATTEMPT)
             return self.get_response(request)
 
-        create_log(request.user, x_forwarded_for, Log.Action.INTERACTION)
+        self.create_log(request.user, x_forwarded_for, Log.Action.INTERACTION)
 
         return self.get_response(request)
