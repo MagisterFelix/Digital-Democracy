@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def create_test_users():
-        path = os.path.join(settings.BASE_DIR, "core", "web", "management", "db_gen_peoples.json")
+        path = os.path.join(settings.BASE_DIR, "core", "web", "management", "db_gen_people.json")
         with open(path) as file:
             people_data = json.load(file)
 
