@@ -28,10 +28,7 @@ class Command(BaseCommand):
         with open(path) as file:
             people_data = json.load(file)
 
-        admin_passport, _, _, admin_email, admin_password = people_data[0].values()
-        User.objects.create_superuser(passport=admin_passport, email=admin_email, password=admin_password)
-
-        for people in people_data[1:]:
+        for people in people_data:
             passport, name, birthday, email, password = people.values()
             passport_hash = hashlib.sha256(passport.encode()).hexdigest()
 
