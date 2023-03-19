@@ -176,7 +176,7 @@
   <script>
     {% if ballot.end_date %}
       let makeRemainingTime = () => {
-        let endTime = new Date({{ ballot.end_date|date:"U" }} * 1000);
+        let endTime = new Date(new Date({{ ballot.end_date|date:"U" }} * 1000) - new Date().getTimezoneOffset() * 60000);
         endTime = (Date.parse(endTime) / 1000);
 
         let now = new Date();
