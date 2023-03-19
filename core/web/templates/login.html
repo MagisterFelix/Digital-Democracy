@@ -1,32 +1,28 @@
 {% extends "base.html" %}
-{% block style %}
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-  appearance: none;
-  margin: 0;
-  }
-{% endblock style %}
+{% block styles %}
+  <style>
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  </style>
+{% endblock styles %}
 {% load crispy_forms_tags %}
 {% block content %}
   <div class="container py-5">
-    <div class="row d-flex justify-content-center align-items-center">
+    <div class="row d-flex justify-content-center">
       <div class="col-6">
-        <div class="card bg-dark text-white py-5">
-          <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-8">
-              <h1 class="mt-2 text-center">Login</h1>
-              <hr/>
-              <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <div class="form-error text-danger">{{ error }}</div>
-                <div class="d-flex justify-content-center mt-5">
-                  <button type="submit" class="btn btn-outline-light px-5">Login</button>
-                </div>
-              </form>
-            </div>
+        <h1 class="mt-2 text-center">Login</h1>
+        <hr class="my-4" />
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="form-error text-danger">{{ error }}</div>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-success mt-2 px-3">Login</button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>

@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block title %}
+  Ballot
+{% endblock title %}
+{% load crispy_forms_tags %}
+{% block styles %}
+  <style>
+    .time-container div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tx_data .row {
+      padding: 5px;
+    }
+  </style>
+{% endblock styles %}
+{% block content %}
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <div class="card">
+          <div class="card-header text-white bg-primary d-flex justify-content-between">
+            <div class="title">{{ ballot.title }}</div>
+            <div class="countOfVotes">Count of votes: {{ ballot.count_of_votes }}</div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-4">
+                <h6 class="card-title mb-4">
+                  <b>Remaining time:</b>
+                </h6>
+                <div class="time-container d-flex">
+                  <div class="me-3">
+                    <span>Days</span>
+                    <span id="days" class="time">00</span>
+                  </div>
+                  <div class="me-3">
+                    <span>Hours</span>
+                    <span id="hours" class="time">00</span>
+                  </div>
+                  <div class="me-3">
+                    <span>Minutes</span>
+                    <span id="minutes" class="time">00</span>
+                  </div>
+                  <div class="me-3">
+                    <span>Seconds</span>
+                    <span id="seconds" class="time">00</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-8">
+                <h6 class="card-title mb-4">
+                  <b>Voting options:</b>
+                </h6>
+                <form method="post" action="{% url 'ballot' ballot.id %}">
+                  {% csrf_token %}
+                  {{ form|crispy }}
+                  <div class="form-error text-danger">{{ error }}</div>
+                  <div class="d-flex justify-content-end">
+                    {% if transaction %}
+                      <button type="button"
+                              class="btn btn-primary px-3"
+                              data-bs-toggle="modal"
+                              data-bs-target="#voteTransaction">
+                        Show transaction
+                      </button>
+                    {% elif not vote %}
+                      <button type="submit"
+                              class="btn btn-primary px-3 {% if not user_info or not ballot.end_date %}disabled{% endif %}">
+                        Vote
+                      </button>
+                    {% endif %}
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if votes %}
+      <div class="row justify-content-center my-5">
+        <div class="col-8">
+          <canvas id="statistics" width="800" height="400"></canvas>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  {% if transaction %}
+    <div class="modal fade"
+         id="voteTransaction"
+         tabindex="-1"
+         aria-labelledby="voteTransactionLabel"
+         aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="voteTransactionLabel">Transaction</h5>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+          </div>
+          <div class="modal-body tx_data">
+            <div class="row">
+              <div class="col-2">TxHash:</div>
+              <div class="col-10">{{ transaction.hash }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2">Block Number:</div>
+              <div class="col-10">
+                <span class="text-primary">{{ transaction.block_number }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">Block Hash:</div>
+              <div class="col-10">{{ transaction.block_hash }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2">Timestamp:</div>
+              <div class="col-10">{{ transaction.block_timestamp }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2">From:</div>
+              <div class="col-10">
+                <span class="text-primary">{{ transaction.from }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">To:</div>
+              <div class="col-10">
+                Contract <span class="text-primary">{{ transaction.to }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">
+                Gas Price:
+              </div>
+              <div class="col-10">
+                {{ transaction.gas_price }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">
+                Gas Used:
+              </div>
+              <div class="col-10">
+                {{ transaction.gas }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">
+                Nonce:
+              </div>
+              <div class="col-10">
+                {{ transaction.nonce }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">
+                Input:
+              </div>
+              <div class="col-10 text-break">
+                {{ transaction.input }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock content %}
+{% block scripts %}
+  <script>
+    {% if ballot.end_date %}
+      let makeRemainingTime = () => {
+        let endTime = new Date(new Date({{ ballot.end_date|date:"U" }} * 1000) - new Date().getTimezoneOffset() * 60000);
+        endTime = (Date.parse(endTime) / 1000);
+
+        let now = new Date();
+        now = (Date.parse(now) / 1000);
+
+        let timeLeft = endTime - now;
+
+        let days = Math.floor(timeLeft / 86400);
+        let hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+        let minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
+        let seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+
+        if (days < 10) {
+          days = "0" + days;
+        }
+        if (hours < 10) {
+          hours = "0" + hours;
+        }
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        if (seconds < 10) {
+          seconds = "0" + seconds;
+        }
+
+        $("#days").html(days);
+        $("#hours").html(hours);
+        $("#minutes").html(minutes);
+        $("#seconds").html(seconds);
+
+        setTimeout(makeRemainingTime, 1000);
+      }
+      makeRemainingTime();
+    {% endif %}
+
+    {% if votes %}
+      const ctx = document.getElementById('statistics').getContext('2d');
+      const myChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: [{% for option in options %}"{{ option }}",{% endfor %}],
+            datasets: [{
+              label: 'Statistics',
+              data: [{% for vote in votes %}"{{ vote }}",{% endfor %}],
+              backgroundColor: [{% for color in colors %}"{{ color }}",{% endfor %}],
+              hoverOffset: 4
+            }]
+          }
+      });
+    {% endif %}
+  </script>
+{% endblock scripts %}

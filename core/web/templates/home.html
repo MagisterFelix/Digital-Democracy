@@ -2,6 +2,160 @@
 {% block title %}
   Home
 {% endblock title %}
+{% load crispy_forms_tags %}
+{% block styles %}
+  <style>
+    .tx_data .row {
+      padding: 5px;
+    }
+  </style>
+{% endblock styles %}
 {% block content %}
-  Home
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-8 text-end">
+        <button type="button"
+                id="create"
+                class="btn btn-outline-dark px-4 {% if not user_info %}disabled{% endif %}"
+                data-bs-toggle="modal"
+                data-bs-target="#ballotCreation">
+          Create a ballot
+        </button>
+      </div>
+    </div>
+    <div class="modal fade"
+         id="ballotCreation"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="ballotCreationLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ballotCreationLabel">New ballot</h5>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+          </div>
+          <form method="post" action="{% url 'home' %}">
+            <div class="modal-body">
+              {% csrf_token %}
+              {{ form|crispy }}
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <div class="form-error text-danger">{{ error }}</div>
+      </div>
+    </div>
+    {% for ballot in ballots %}
+      <div class="row my-4 justify-content-center">
+        <div class="col-8">
+          <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-pills card-header-pills justify-content-between">
+                <li class="nav-item">
+                  <a class="nav-link"
+                     data-bs-toggle="modal"
+                     href="#ballotTransaction-{{ ballot.id }}"
+                     role="button">{{ ballot.tx_hash }}</a>
+                </li>
+                <li class="nav-item">
+                  <a class="btn btn-primary" href="{% url 'ballot' ballot.id %}">Details</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">{{ ballot.title }}</h4>
+              <p class="card-text">
+                Count of votes: {{ ballot.count_of_votes }}
+                <br/>
+                Ends: {{ ballot.end_date }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade"
+           id="ballotTransaction-{{ ballot.id }}"
+           tabindex="-1"
+           aria-labelledby="ballotTransactionLabel"
+           aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ballotTransactionLabel">Transaction</h5>
+              <button type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+            </div>
+            <div class="modal-body tx_data">
+              <div class="row">
+                <div class="col-2">TxHash:</div>
+                <div class="col-10">{{ ballot.transaction.hash }}</div>
+              </div>
+              <div class="row">
+                <div class="col-2">Block Number:</div>
+                <div class="col-10">
+                  <span class="text-primary">{{ ballot.transaction.block_number }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">Block Hash:</div>
+                <div class="col-10">{{ ballot.transaction.block_hash }}</div>
+              </div>
+              <div class="row">
+                <div class="col-2">Timestamp:</div>
+                <div class="col-10">{{ ballot.transaction.block_timestamp }}</div>
+              </div>
+              <div class="row">
+                <div class="col-2">From:</div>
+                <div class="col-10">
+                  <span class="text-primary">{{ ballot.transaction.from }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">To:</div>
+                <div class="col-10">
+                  Contract <span class="text-primary">{{ ballot.transaction.to }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">Gas Price:</div>
+                <div class="col-10">{{ ballot.transaction.gas_price }}</div>
+              </div>
+              <div class="row">
+                <div class="col-2">Gas Used:</div>
+                <div class="col-10">{{ ballot.transaction.gas }}</div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  Nonce:
+                </div>
+                <div class="col-10">
+                  {{ ballot.transaction.nonce }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  Input:
+                </div>
+                <div class="col-10 text-break">
+                  {{ ballot.transaction.input }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock content %}

@@ -6,7 +6,7 @@ from django.db import models
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, passport, email, password, address=None, **extra_fields):
+    def create_user(self, passport, email, password, **extra_fields):
         if passport is None or passport == "":
             raise ValueError("Users must have a passport.")
 
@@ -19,7 +19,6 @@ class UserManager(BaseUserManager):
         user = self.model(
             passport=hashlib.sha256(passport.encode()).hexdigest(),
             email=self.normalize_email(email),
-            address=address,
             **extra_fields
         )
         user.set_password(password)
@@ -27,12 +26,12 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, passport, email, password, address="", **extra_fields):
+    def create_superuser(self, passport, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
-        return self.create_user(passport, email, password, address, **extra_fields)
+        return self.create_user(passport, email, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -52,12 +51,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         error_messages={
             "unique": "A user with this email already exists.",
         })
-    address = models.CharField(
-        max_length=128,
-        unique=True,
-        error_messages={
-            "unique": "A user with that address already exists.",
-        })
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -68,6 +61,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     objects = UserManager()
+
+    def activate(self):
+        self.is_active = True
+        self.save()
+
+    def deactivate(self):
+        self.is_active = False
+        self.save()
 
     def __str__(self):
         return str(self.passport)
