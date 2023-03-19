@@ -2,6 +2,7 @@ import datetime
 import hashlib
 import json
 import os
+import random
 import time
 
 from django.conf import settings
@@ -17,6 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.create_test_users()
         self.create_test_ballots()
+        self.create_test_votes()
 
         self.stdout.write(self.style.SUCCESS("Successfully filled"))
 
@@ -50,3 +52,16 @@ class Command(BaseCommand):
 
             if tx_hash and ballot_id:
                 Ballot.objects.create(ballot_id=ballot_id, tx_hash=tx_hash)
+
+    @staticmethod
+    def create_test_votes():
+        ballots = Ballot.objects.all()
+        users = User.objects.filter(is_superuser=False)
+
+        for user in users:
+            for ballot in ballots:
+                if random.random() > 0.5:
+                    options = bm_voting.get_ballot(ballot_id=ballot.id)[1]
+                    option = random.randint(1, len(options))
+
+                    bm_voting.vote(ballot_id=ballot.id, passport=user.passport, option=option)
