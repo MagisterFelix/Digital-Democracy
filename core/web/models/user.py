@@ -1,6 +1,8 @@
 import hashlib
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.core.mail import send_mail
 from django.db import models
 
 
@@ -61,6 +63,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     objects = UserManager()
+
+    def email_user(self, subject, message, **kwargs):
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [self.email], **kwargs)
 
     def activate(self):
         self.is_active = True

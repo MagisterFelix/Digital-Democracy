@@ -78,6 +78,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_BACKEND = f"django.core.mail.backends.{'console' if DEBUG else 'smtp'}.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+
+EMAIL_HOST_USER = config("EMAIL_USER")
+
+EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
+
+if DEBUG:
+    EMAIL_USE_TLS = True
+    EMAIL_PORT = 587
+else:
+    EMAIL_USE_SSL = True
+    EMAIL_PORT = 465
+
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
