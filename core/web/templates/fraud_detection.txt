@@ -1,0 +1,19 @@
+{% autoescape off %}
+Hello,
+
+We are reaching out to you regarding some suspicious activity on your account. Our fraud detection system has identified some unusual transactions that may indicate fraudulent activity.
+
+For your protection, we have temporarily suspended your account until we can verify the authenticity of these transactions. We understand that this may be inconvenient, but we take the security of our users' accounts very seriously and want to ensure that your account is safe from any unauthorized access.
+
+Please take a moment to review the transactions that were flagged by our system. If you recognize these transactions and can confirm that they were legitimate, please click the following link to activate your account:
+
+{{ protocol }}://{{ domain }}/activate/{{ uidb64 }}/{{ token }}/
+
+If you do not recognize these transactions, we recommend that you change your password immediately and contact us as soon as possible to report any unauthorized activity.
+
+Thank you for your cooperation in this matter. We apologize for any inconvenience this may have caused and assure you that we are taking all necessary steps to protect your account and prevent any further fraudulent activity.
+
+Best regards,
+Digital Democracy
+
+{% endautoescape %}
