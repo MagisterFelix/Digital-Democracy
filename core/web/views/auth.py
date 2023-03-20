@@ -1,7 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, render
+from django.utils.http import urlsafe_base64_decode
 
 from core.web.forms import LoginForm
+from core.web.models.user import User
 
 
 def login_view(request):
@@ -29,4 +33,26 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    return redirect("login")
+
+
+def activation_view(request, uidb64, token):
+    if request.user.is_authenticated:
+        return redirect("home")
+
+    try:
+        passport = urlsafe_base64_decode(uidb64).decode()
+    except (UnicodeDecodeError, ValueError):
+        return HttpResponseForbidden()
+
+    try:
+        user = User.objects.get(passport=passport)
+    except User.DoesNotExist:
+        return HttpResponseForbidden()
+
+    if not default_token_generator.check_token(user, token):
+        return HttpResponseForbidden()
+
+    request.session["user"] = user.passport
+
     return redirect("login")
