@@ -13,6 +13,7 @@ from core.web.models import Ballot, User
 
 
 class Command(BaseCommand):
+
     help = "Fill blockchain and database with test data"
 
     def handle(self, *args, **options):
