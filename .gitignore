@@ -52,3 +52,5 @@ db*.json
 /blockchain/users/contracts/artifacts/
 /blockchain/voting/contracts/artifacts/
 
+# Train data
+**/machine_learning/data/*
