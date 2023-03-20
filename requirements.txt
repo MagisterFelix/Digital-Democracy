@@ -3,5 +3,7 @@ crispy-bootstrap5==0.7
 django==4.1.7
 djlint==1.19.16
 flake8==6.0.0
+pandas==1.5.3
 python-decouple==3.8
+scikit-learn==1.2.2
 web3==6.0.0
