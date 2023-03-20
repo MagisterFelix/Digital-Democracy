@@ -50,15 +50,15 @@ class BallotAdmin(ModelAdmin):
 @admin.register(Log)
 class LogAdmin(ModelAdmin):
 
-    list_display = ("created_at", "user", "action", "location",)
+    list_display = ("created_at", "user", "action", "location", "is_fraud",)
     fieldsets = (
         (None, {
             "fields": (
-                "created_at", "user", "action", "location",
+                "created_at", "user", "action", "location", "is_fraud",
             )
         }),
     )
-    readonly_fields = ("created_at", "user", "action", "ip", "location",)
+    readonly_fields = ("created_at", "user", "action", "ip", "location", "is_fraud",)
 
 
 admin.site.unregister(Group)
